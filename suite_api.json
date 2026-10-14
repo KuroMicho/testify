@@ -15,7 +15,7 @@
           "script": {
             "type": "text/javascript",
             "exec": [
-              "pm.test(\"Guardar Token JWT en variable de entorno\", function () {\r\n    var jsonData = pm.response.json();\r\n    if(jsonData.token) {\r\n        pm.environment.set(\"jwt_token\", jsonData.token);\r\n    }\r\n});\r\n\r\npm.test(\"El tiempo de respuesta es menor a 200ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(200);\r\n});"
+              "pm.test(\"Validar credenciales y almacenar Token JWT\", function () {\r\n    pm.response.to.have.status(200);\r\n    var jsonData = pm.response.json();\r\n    pm.environment.set(\"jwt_token\", jsonData.token);\r\n});\r\n\r\npm.test(\"El tiempo de respuesta es menor a 200ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(200);\r\n});"
             ]
           }
         }
