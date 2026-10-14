@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal Cervecería QA</title>
+    <style>
+        body { font-family: sans-serif; background: #f8fafc; display: flex; justify-content: center; padding-top: 50px; }
+        .container { background: white; padding: 30px; border-radius: 8px; width: 400px; }
+        input, button { width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box; }
+        button { background: #6d28d9; color: white; border: none; cursor: pointer; border-radius: 4px;}
+        .item-card { background: #f1f5f9; padding: 15px; margin-bottom: 8px; border-left: 4px solid #6d28d9; }
+    </style>
+</head>
+<body>
+
+    <!-- SECCIÓN LOGIN -->
+    <div class="container" id="login-section">
+        <h2 id="login-title">Ingreso Seguro</h2>
+        <form id="login-form">
+            <input type="email" id="email-input" required placeholder="admin@cerveceria.com">
+            <input type="password" id="password-input" required placeholder="******">
+            <button type="submit" id="login-btn">Iniciar Sesión</button>
+            <p id="error-message" style="display:none; color:red;">Credenciales denegadas</p>
+        </form>
+    </div>
+
+    <!-- SECCIÓN DASHBOARD -->
+    <div class="container" id="dashboard-section" style="display: none;">
+        <h2 id="dashboard-title">Dashboard QA</h2>
+        <button id="load-beers-btn" style="background: #10b981;">Consultar Catálogo</button>
+        <div id="beer-list"></div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:3000/api/v1';
+        
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email-input').value;
+            const password = document.getElementById('password-input').value;
+            
+            const res = await fetch(`${API}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            
+            if(res.ok) {
+                localStorage.setItem('jwt', data.token);
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('dashboard-section').style.display = 'block';
+            } else {
+                document.getElementById('error-message').style.display = 'block';
+            }
+        });
+
+        document.getElementById('load-beers-btn').addEventListener('click', async () => {
+            const token = localStorage.getItem('jwt');
+            const res = await fetch(`${API}/beers`, { headers: { 'Authorization': `Bearer ${token}` } });
+            
+            if(res.ok) {
+                const data = await res.json();
+                const list = document.getElementById('beer-list');
+                list.innerHTML = '';
+                data.data.forEach(b => {
+                    list.innerHTML += `<div class="item-card"><strong>${b.name}</strong> - $${b.price}</div>`;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

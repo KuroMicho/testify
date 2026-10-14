@@ -1,0 +1,68 @@
+{
+  "info": {
+    "_postman_id": "c5913fc0-9c26-49ea-b01f-2db43bfba13f",
+    "name": "cerveza",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "43848850",
+    "_collection_link": "https://go.postman.co/collection/43848850-c5913fc0-9c26-49ea-b01f-2db43bfba13f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "LOGIN",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Guardar Token JWT en variable de entorno\", function () {\r\n    var jsonData = pm.response.json();\r\n    if(jsonData.token) {\r\n        pm.environment.set(\"jwt_token\", jsonData.token);\r\n    }\r\n});\r\n\r\npm.test(\"El tiempo de respuesta es menor a 200ms\", function () {\r\n    pm.expect(pm.response.responseTime).to.be.below(200);\r\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"admin@cerveceria.com\",\r\n    \"password\":  \"123456\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{url_base}}/{{api_version}}/auth/login",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "{{api_version}}",
+            "auth",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET BEERS",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{url_base}}/{{api_version}}/beers",
+          "host": [
+            "{{url_base}}"
+          ],
+          "path": [
+            "{{api_version}}",
+            "beers"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

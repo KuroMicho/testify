@@ -1,0 +1,22 @@
+name: Pipeline de Integración Continua (QA)
+on: [push, pull_request]
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          
+      - name: Iniciar Backend
+        run: |
+          npm install express cors jsonwebtoken
+          node server.js &
+          sleep 3
+          
+      - name: Ejecutar Suite de Postman con Newman
+        run: npx newman run suite_api.json -e entorno_ci.json
