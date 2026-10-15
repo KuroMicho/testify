@@ -4,13 +4,13 @@
   "values": [
     {
       "key": "url_base",
-      "value": "",
+      "value": "localhost:3000",
       "type": "default",
       "enabled": true
     },
     {
       "key": "api_version",
-      "value": "",
+      "value": "v1",
       "type": "default",
       "enabled": true
     },
